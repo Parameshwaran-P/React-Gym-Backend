@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// AUTHENTICATION & AUTHORIZATION
+// ==========================================
+
+enum Role {
+  ADMIN
+  CONTENT_EDITOR
+  USER
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  displayName   String?  @map("display_name")
+  avatarUrl     String?  @map("avatar_url")  // ← This is causing the issue
+  
+  role          Role     @default(USER)
+  isActive      Boolean  @default(true) @map("is_active")
+  
+  totalXp       Int      @default(0) @map("total_xp")
+  level         Int      @default(1)
+  currentStreak Int      @default(0) @map("current_streak")
+  longestStreak Int      @default(0) @map("longest_streak")
+  lastActiveAt  DateTime? @map("last_active_at")
+  
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+  
+  courseProgress    CourseProgress[]
+  xpTransactions    XpTransaction[]
+  streaks           Streak[]
+  coursesCreated    Course[]         @relation("CourseCreator")
+  coursesUpdated    Course[]         @relation("CourseUpdater")
+  
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@map("users")
+}
+
+// ==========================================
+// COURSE CONTENT
+// ==========================================
+
+enum CourseDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Course {
+  id              String           @id @default(uuid())
+  slug            String           @unique
+  title           String
+  description     String?
+  difficulty      CourseDifficulty
+  estimatedHours  Int              @map("estimated_hours")
+  totalXp         Int              @default(0) @map("total_xp")
+  previewVideoUrl String?          @map("preview_video_url")
+  thumbnailUrl    String?          @map("thumbnail_url")
+  stepsDefinition Json             @map("steps_definition")
+  status          CourseStatus     @default(DRAFT)
+  version         Int              @default(1)
+  orderIndex      Int              @default(0) @map("order_index")
+  createdById     String           @map("created_by_id")
+  updatedById     String?          @map("updated_by_id")
+  publishedAt     DateTime?        @map("published_at")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  deletedAt       DateTime?        @map("deleted_at")
+  
+  createdBy       User             @relation("CourseCreator", fields: [createdById], references: [id])
+  updatedBy       User?            @relation("CourseUpdater", fields: [updatedById], references: [id])
+  tags            CourseTag[]
+  prerequisites   CoursePrerequisite[] @relation("CoursePrerequisites")
+  dependentCourses CoursePrerequisite[] @relation("DependentCourses")
+  progress        CourseProgress[]
+  unlockRules     UnlockRule[]
+  
+  @@index([slug])
+  @@index([status])
+  @@index([difficulty])
+  @@index([orderIndex])
+  @@index([createdById])
+  @@map("courses")
+}
+
+model Tag {
+  id        String      @id @default(uuid())
+  name      String      @unique
+  slug      String      @unique
+  courses   CourseTag[]
+  @@map("tags")
+}
+
+model CourseTag {
+  courseId  String
+  tagId     String
+  course    Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  tag       Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  @@id([courseId, tagId])
+  @@map("course_tags")
+}
+
+model CoursePrerequisite {
+  courseId        String @map("course_id")
+  prerequisiteId  String @map("prerequisite_id")
+  course          Course @relation("CoursePrerequisites", fields: [courseId], references: [id], onDelete: Cascade)
+  prerequisite    Course @relation("DependentCourses", fields: [prerequisiteId], references: [id], onDelete: Cascade)
+  @@id([courseId, prerequisiteId])
+  @@map("course_prerequisites")
+}
+
+// ==========================================
+// USER PROGRESS
+// ==========================================
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model CourseProgress {
+  id              String         @id @default(uuid())
+  userId          String         @map("user_id")
+  courseId        String         @map("course_id")
+  status          ProgressStatus @default(NOT_STARTED)
+  stepsProgress   Json           @default("{}") @map("steps_progress")
+  completionRate  Int            @default(0) @map("completion_rate")
+  totalSteps      Int            @default(0) @map("total_steps")
+  completedSteps  Int            @default(0) @map("completed_steps")
+  xpEarned        Int            @default(0) @map("xp_earned")
+  courseVersion   Int            @default(1) @map("course_version")
+  startedAt       DateTime?      @map("started_at")
+  completedAt     DateTime?      @map("completed_at")
+  lastAccessedAt  DateTime?      @map("last_accessed_at")
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course          Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, courseId])
+  @@index([userId, status])
+  @@index([courseId])
+  @@map("course_progress")
+}
+
+// ==========================================
+// XP SYSTEM
+// ==========================================
+
+enum XpReason {
+  STEP_COMPLETED
+  COURSE_COMPLETED
+  STREAK_BONUS
+  DAILY_LOGIN
+  ACHIEVEMENT
+  PERFECT_SCORE
+  ADMIN_ADJUSTMENT
+}
+
+model XpTransaction {
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  amount        Int
+  reason        XpReason
+  description   String?
+  referenceType String?   @map("reference_type")
+  referenceId   String?   @map("reference_id")
+  metadata      Json?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([createdAt])
+  @@index([reason])
+  @@map("xp_transactions")
+}
+
+// ==========================================
+// STREAK SYSTEM
+// ==========================================
+
+model Streak {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  activityDate DateTime @map("activity_date") @db.Date
+  activityType String?  @map("activity_type")
+  activityId   String?  @map("activity_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, activityDate])
+  @@index([userId, activityDate])
+  @@map("streaks")
+}
+
+// ==========================================
+// UNLOCK SYSTEM
+// ==========================================
+
+model UnlockRule {
+  id            String   @id @default(uuid())
+  courseId      String   @map("course_id")
+  conditions    Json
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  course        Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  @@index([courseId])
+  @@map("unlock_rules")
+}
