@@ -4,11 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorMiddleware = errorMiddleware;
-const errors_1 = require("@/common/errors");
-const response_util_1 = require("@/common/utils/response.util");
-const logger_1 = __importDefault(require("@/config/logger"));
+const AppError_1 = require("../common/errors/AppError");
+const response_util_1 = require("../common/utils/response.util");
+const logger_1 = __importDefault(require("../config/logger"));
 function errorMiddleware(err, req, res, next) {
-    if (err instanceof errors_1.AppError) {
+    if (err instanceof AppError_1.AppError) {
         logger_1.default.warn('Application error', {
             code: err.code,
             message: err.message,

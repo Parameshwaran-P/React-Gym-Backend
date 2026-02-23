@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseController = void 0;
 const course_service_1 = require("./course.service");
-const response_util_1 = require("@/common/utils/response.util");
+const response_util_1 = require("../../common/utils/response.util");
 class CourseController {
     constructor() {
         this.createCourse = async (req, res, next) => {

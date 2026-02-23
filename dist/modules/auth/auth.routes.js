@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const auth_controller_1 = require("./auth.controller");
-const validation_middleware_1 = require("@/middleware/validation.middleware");
+const validation_middleware_1 = require("../../middleware/validation.middleware");
 const auth_validation_1 = require("./auth.validation");
 const router = (0, express_1.Router)();
 const authController = new auth_controller_1.AuthController();

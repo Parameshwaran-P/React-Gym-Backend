@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import { env } from '../config/env';
-import { errorMiddleware } from '../middleware/error.middleware';
-import { platformMiddleware } from '../middleware/platform.middleware';
-import routes from './index';
+import { env } from './config/env';
+import { errorMiddleware } from './middleware/error.middleware';
+import { platformMiddleware } from './middleware/platform.middleware';
+import routes from './routes/index';
 // import logger from '../config/logger';
 
 const app = express();

@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateStreak = updateStreak;
-const prisma_1 = __importDefault(require("@/config/prisma"));
+const prisma_1 = __importDefault(require("../../../config/prisma"));
 async function updateStreak(userId, activityType, activityId, tx) {
     const client = tx || prisma_1.default;
     const today = new Date();

@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProgressService = void 0;
 const progress_repository_1 = require("../progress.repository");
-const errors_1 = require("@/common/errors");
+const AppError_1 = require("../../../common/errors/AppError");
 const xpCalculator_util_1 = require("../utils/xpCalculator.util");
 const streakCalculator_util_1 = require("../utils/streakCalculator.util");
-const prisma_1 = __importDefault(require("@/config/prisma"));
+const prisma_1 = __importDefault(require("../../../config/prisma"));
 const client_1 = require("@prisma/client");
 class ProgressService {
     constructor() {
@@ -21,13 +21,13 @@ class ProgressService {
                 where: { id: input.courseId, deletedAt: null },
             });
             if (!course) {
-                throw new errors_1.NotFoundError('Course not found', 'COURSE_NOT_FOUND');
+                throw new AppError_1.NotFoundError('Course not found', 'COURSE_NOT_FOUND');
             }
             // 2. Validate step exists
             const stepsDefinition = course.stepsDefinition;
             const stepDef = stepsDefinition[input.stepKey];
             if (!stepDef) {
-                throw new errors_1.NotFoundError('Step not found', 'STEP_NOT_FOUND');
+                throw new AppError_1.NotFoundError('Step not found', 'STEP_NOT_FOUND');
             }
             // 3. Get or create progress
             let progress = await this.progressRepository.findProgress(userId, input.courseId, tx);
@@ -46,7 +46,7 @@ class ProgressService {
             const stepsProgress = progress.stepsProgress || {};
             const currentStepProgress = stepsProgress[input.stepKey];
             if (currentStepProgress?.status === 'COMPLETED') {
-                throw new errors_1.ConflictError('Step already completed', 'STEP_ALREADY_COMPLETED');
+                throw new AppError_1.ConflictError('Step already completed', 'STEP_ALREADY_COMPLETED');
             }
             // 5. Calculate XP
             const { baseXp, bonusXp, totalXp } = (0, xpCalculator_util_1.calculateXpForStep)(stepDef, input.score);
@@ -162,7 +162,7 @@ class ProgressService {
             where: { id: userId },
         });
         if (!user) {
-            throw new errors_1.NotFoundError('User not found', 'USER_NOT_FOUND');
+            throw new AppError_1.NotFoundError('User not found', 'USER_NOT_FOUND');
         }
         // Get courses in progress
         const coursesInProgress = await prisma_1.default.courseProgress.findMany({

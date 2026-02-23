@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const course_controller_1 = require("./course.controller");
-const auth_middleware_1 = require("@/middleware/auth.middleware");
-const rbac_middleware_1 = require("@/middleware/rbac.middleware");
-const validation_middleware_1 = require("@/middleware/validation.middleware");
+const auth_middleware_1 = require("../../middleware/auth.middleware");
+const rbac_middleware_1 = require("../../middleware/rbac.middleware");
+const validation_middleware_1 = require("../../middleware/validation.middleware");
 const course_validation_1 = require("./course.validation");
 const client_1 = require("@prisma/client");
 const router = (0, express_1.Router)();

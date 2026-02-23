@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseService = void 0;
 const course_repository_1 = require("./course.repository");
-const errors_1 = require("@/common/errors");
+const AppError_1 = require("../../common/errors/AppError");
 const client_1 = require("@prisma/client");
-const pagination_util_1 = require("@/common/utils/pagination.util");
+const pagination_util_1 = require("../../common/utils/pagination.util");
 const stepFilter_util_1 = require("./utils/stepFilter.util");
-const prisma_1 = __importDefault(require("@/config/prisma"));
+const prisma_1 = __importDefault(require("../../config/prisma"));
 class CourseService {
     constructor() {
         this.courseRepository = new course_repository_1.CourseRepository();
@@ -17,7 +17,7 @@ class CourseService {
     async createCourse(input, userId, userRole) {
         // Authorization check
         if (userRole !== client_1.Role.ADMIN && userRole !== client_1.Role.CONTENT_EDITOR) {
-            throw new errors_1.ForbiddenError('Only admins and editors can create courses');
+            throw new AppError_1.ForbiddenError('Only admins and editors can create courses');
         }
         const course = await this.courseRepository.create({
             ...input,
@@ -101,7 +101,7 @@ class CourseService {
     async getCourseBySlug(slug, userId) {
         const course = await this.courseRepository.findBySlug(slug);
         if (!course) {
-            throw new errors_1.NotFoundError('Course not found', 'COURSE_NOT_FOUND');
+            throw new AppError_1.NotFoundError('Course not found', 'COURSE_NOT_FOUND');
         }
         // Filter sensitive data from steps
         const filteredSteps = (0, stepFilter_util_1.filterCourseSteps)(course.stepsDefinition);
@@ -150,15 +150,15 @@ class CourseService {
     }
     async publishCourse(courseId, userId, userRole) {
         if (userRole !== client_1.Role.ADMIN && userRole !== client_1.Role.CONTENT_EDITOR) {
-            throw new errors_1.ForbiddenError('Only admins and editors can publish courses');
+            throw new AppError_1.ForbiddenError('Only admins and editors can publish courses');
         }
         const course = await this.courseRepository.findById(courseId);
         if (!course) {
-            throw new errors_1.NotFoundError('Course not found', 'COURSE_NOT_FOUND');
+            throw new AppError_1.NotFoundError('Course not found', 'COURSE_NOT_FOUND');
         }
         // Editors can only publish their own courses
         if (userRole === client_1.Role.CONTENT_EDITOR && course.createdById !== userId) {
-            throw new errors_1.ForbiddenError('You can only publish your own courses');
+            throw new AppError_1.ForbiddenError('You can only publish your own courses');
         }
         return this.courseRepository.publish(courseId);
     }

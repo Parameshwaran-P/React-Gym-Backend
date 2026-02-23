@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validate = validate;
 const zod_1 = require("zod");
-const errors_1 = require("@/common/errors");
+const AppError_1 = require("../common/errors/AppError");
 function validate(schema) {
     return async (req, res, next) => {
         try {
@@ -19,7 +19,7 @@ function validate(schema) {
                     field: err.path.join('.'),
                     message: err.message,
                 }));
-                next(new errors_1.ValidationError('Validation failed', details));
+                next(new AppError_1.ValidationError('Validation failed', details));
             }
             else {
                 next(error);

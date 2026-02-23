@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const auth_service_1 = require("./auth.service");
-const response_util_1 = require("@/common/utils/response.util");
+const response_util_1 = require("../../common/utils/response.util");
 class AuthController {
     constructor() {
         this.register = async (req, res, next) => {
