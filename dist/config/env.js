@@ -12,7 +12,8 @@ const envSchema = zod_1.z.object({
     PORT: zod_1.z.string().transform(Number).default(3000),
     DATABASE_URL: zod_1.z.string(),
     JWT_SECRET: zod_1.z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
-    JWT_EXPIRES_IN: zod_1.z.string().default('7d'),
+    JWT_EXPIRES_IN: zod_1.z.string().default('1d'),
     CORS_ORIGINS: zod_1.z.string().transform(val => val.split(',')),
+    // CORS_METHODS: z.string().transform(val => val.split(',')),
 });
 exports.env = envSchema.parse(process.env);

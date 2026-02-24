@@ -14,6 +14,7 @@ const app = (0, express_1.default)();
 // Middleware
 app.use((0, cors_1.default)({
     origin: env_1.env.CORS_ORIGINS,
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     credentials: true,
 }));
 app.use(express_1.default.json());
