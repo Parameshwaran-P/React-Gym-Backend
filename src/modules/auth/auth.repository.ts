@@ -1,5 +1,5 @@
 import prisma from '../../config/prisma';
-import { User, Role } from '@prisma/client';
+import { User, Role, Prisma } from '@prisma/client';
 
 export class AuthRepository {
   async findUserByEmail(email: string): Promise<User | null> {
@@ -18,4 +18,19 @@ export class AuthRepository {
       data,
     });
   }
+  async findByResetTokenHash(tokenHash: string) {
+    return prisma.user.findFirst({
+      where: {
+        AND: [
+          { deletedAt: null },
+        ],
+      },
+    });
+  }
+async updateUser(userId: string, data: Prisma.UserUpdateInput) {
+  return prisma.user.update({
+    where: { id: userId },
+    data,
+  });
+}
 }

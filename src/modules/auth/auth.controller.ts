@@ -26,4 +26,31 @@ export class AuthController {
       next(error);
     }
   };
+
+  async forgotPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email } = forgotPasswordSchema.parse(req.body);
+
+      const result = await this.authService.forgotPassword(email);
+
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { token, newPassword } = resetPasswordSchema.parse(req.body);
+
+      const result = await this.authService.resetPassword(
+        token,
+        newPassword
+      );
+
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
