@@ -233,3 +233,20 @@ model UnlockRule {
   @@index([courseId])
   @@map("unlock_rules")
 }
+
+
+// ================================================
+// Notification
+// ================================================
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  type      String
+  channel   String   // EMAIL | IN_APP
+  status    String   // PENDING | SENT | FAILED
+  payload   Json
+  read      Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+updatedAt       DateTime       @updatedAt @map("updated_at")
+}
