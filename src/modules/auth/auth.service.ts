@@ -4,15 +4,15 @@ import { generateToken } from '../../common/utils/jwt.util';
 import { ConflictError, UnauthorizedError } from '../../common/errors/AppError';
 import { RegisterInput, LoginInput } from './auth.validation';
 import {  generateResetToken, hashResetToken } from '../../utils/reset-token';
-import { NotificationService } from '../../common/services/notification.service';
+// import { NotificationService } from '../../modules/notification/notification.service';
 
 export class AuthService {
   private authRepository: AuthRepository;
-  private notificationService: NotificationService;
+  // private notificationService: NotificationService;
 
   constructor() {
     this.authRepository = new AuthRepository();
-    this.notificationService = new NotificationService();
+    // this.notificationService = new NotificationService();
   }
 
   async register(input: RegisterInput) {
@@ -106,10 +106,10 @@ export class AuthService {
 
   const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
 
-  await this.notificationService.sendPasswordResetEmail(
-    user.email,
-    resetLink
-  );
+  // await this.notificationService.sendPasswordResetEmail(
+  //   user.email,
+  //   resetLink
+  // );
 
   return genericResponse;
 }
