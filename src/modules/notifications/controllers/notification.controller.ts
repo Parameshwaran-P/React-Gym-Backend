@@ -40,7 +40,7 @@ export class NotificationController {
 
   getUserNotifications = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = req.params.userId;
+      const userId = req.params.userId as string;
       const { page = 1, limit = 20, unreadOnly = false } = req.query as any;
 
       const result = await this.notificationService.getUserNotifications(
@@ -67,7 +67,7 @@ export class NotificationController {
 
   markAsRead = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await this.notificationService.markAsRead(req.params.id);
+      await this.notificationService.markAsRead(req.params.id as string);
 
       res.json(
         successResponse({
