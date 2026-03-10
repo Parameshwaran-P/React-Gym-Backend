@@ -31,7 +31,7 @@ export const notificationConfig = {
   },
   
   queue: {
-    useQueue: env.USE_QUEUE === 'true',
+    useQueue: env.USE_QUEUE === 'false',
     redisUrl: env.REDIS_URL,
   },
   

@@ -8,13 +8,13 @@ export function getNotificationTemplate(
   metadata?: Record<string, any>
 ): NotificationTemplate {
   switch (type) {
-    case 'COURSE_PURCHASED':
+    case NotificationType.COURSE_PURCHASED:
       return getCoursePurchasedTemplate(metadata);
-    case 'PAYMENT_SUCCESS':
+    case NotificationType.PAYMENT_SUCCESS:
       return getPaymentSuccessTemplate(metadata);
-    case 'PAYMENT_FAILED':
+    case NotificationType.PAYMENT_FAILED:
       return getPaymentFailedTemplate(metadata);
-    case 'SYSTEM_ALERT':
+    case NotificationType.SYSTEM_ALERT:
       return getSystemAlertTemplate(metadata);
     default:
       return getDefaultTemplate(metadata);
@@ -72,6 +72,53 @@ function getPaymentFailedTemplate(metadata?: Record<string, any>): NotificationT
       </div>
     `,
     text: `Payment failed for $${metadata?.amount}. Please try again at ${metadata?.retryUrl}`,
+  };
+}
+
+function getRegistrationSuccessTemplate(metadata?: Record<string, any>): NotificationTemplate {
+  return {
+    subject: 'Welcome to Gamified Learning 🎉',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #4CAF50;">Welcome ${metadata?.name || 'User'}!</h2>
+        <p>Your account has been successfully created.</p>
+        <p>We're excited to have you join our learning community.</p>
+
+        <a href="${metadata?.loginUrl}" 
+           style="display: inline-block; padding: 12px 24px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; margin-top: 16px;">
+          Start Learning
+        </a>
+
+        <p style="margin-top:20px;">Happy Learning 🚀</p>
+        <p><strong>Gamified Learning Team</strong></p>
+      </div>
+    `,
+    text: `Welcome ${metadata?.name || 'User'}! Your account has been created successfully. Login here: ${metadata?.loginUrl}`
+  };
+}
+
+function getLoginAlertTemplate(metadata?: Record<string, any>): NotificationTemplate {
+  return {
+    subject: 'New Login Detected',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #2196F3;">New Login Detected</h2>
+        <p>Hello ${metadata?.name || 'User'},</p>
+        <p>Your account was just logged in.</p>
+
+        <p><strong>Device:</strong> ${metadata?.device || 'Unknown device'}</p>
+        <p><strong>Location:</strong> ${metadata?.location || 'Unknown location'}</p>
+        <p><strong>Time:</strong> ${metadata?.time || new Date().toLocaleString()}</p>
+
+        <p>If this wasn't you, please reset your password immediately.</p>
+
+        <a href="${metadata?.securityUrl}" 
+           style="display: inline-block; padding: 12px 24px; background-color: #f44336; color: white; text-decoration: none; border-radius: 4px; margin-top: 16px;">
+          Secure Account
+        </a>
+      </div>
+    `,
+    text: `New login detected from ${metadata?.device} at ${metadata?.time}. If this wasn't you, secure your account here: ${metadata?.securityUrl}`
   };
 }
 

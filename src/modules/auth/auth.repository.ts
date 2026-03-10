@@ -21,9 +21,8 @@ export class AuthRepository {
   async findByResetTokenHash(tokenHash: string) {
     return prisma.user.findFirst({
       where: {
-        AND: [
-          { deletedAt: null },
-        ],
+        resetTokenHash: tokenHash,
+        deletedAt: null,
       },
     });
   }

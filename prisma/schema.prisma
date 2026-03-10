@@ -243,6 +243,8 @@ model UnlockRule {
 // ================================================
 
 enum NotificationType {
+  REGISTRATION_SUCCESS
+  LOGIN_SUCCESS
   COURSE_PURCHASED
   PAYMENT_SUCCESS
   PAYMENT_FAILED

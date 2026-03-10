@@ -9,9 +9,9 @@ export class WhatsAppService {
   private accessToken: string;
 
   constructor() {
-    this.apiUrl = notificationConfig.whatsapp.apiUrl;
-    this.phoneNumberId = notificationConfig.whatsapp.phoneNumberId;
-    this.accessToken = notificationConfig.whatsapp.accessToken;
+    this.apiUrl = notificationConfig?.whatsapp.apiUrl;
+    this.phoneNumberId = notificationConfig?.whatsapp.phoneNumberId;
+    this.accessToken = notificationConfig?.whatsapp.accessToken;
   }
 
   async sendMessage(data: WhatsAppData): Promise<void> {

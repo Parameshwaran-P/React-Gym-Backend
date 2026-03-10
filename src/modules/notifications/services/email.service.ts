@@ -7,7 +7,10 @@ export class EmailService {
   private transporter: nodemailer.Transporter;
 
   constructor() {
-    this.transporter = nodemailer.createTransport(notificationConfig.email.smtp);
+    this.transporter = nodemailer.createTransport({
+      ...notificationConfig.email.smtp,
+      port: Number(notificationConfig.email.smtp.port),
+    });
   }
 
   async sendEmail(data: EmailData): Promise<void> {
