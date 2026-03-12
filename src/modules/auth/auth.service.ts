@@ -4,6 +4,8 @@ import { generateToken } from '../../common/utils/jwt.util';
 import { ConflictError, UnauthorizedError } from '../../common/errors/AppError';
 import { RegisterInput, LoginInput } from './auth.validation';
 import {  generateResetToken, hashResetToken } from '../../utils/reset-token';
+import { NotificationService } from '../../modules/notifications/services/notification.service';
+import { NotificationType } from '@prisma/client';
 // import { NotificationService } from '../../modules/notification/notification.service';
 
 export class AuthService {
@@ -84,7 +86,8 @@ export class AuthService {
     };
   }
 
-  async forgotPassword(email: string) {
+ async forgotPassword(email: string) {
+
   const user = await this.authRepository.findUserByEmail(email);
 
   const genericResponse = {
@@ -105,11 +108,18 @@ export class AuthService {
   });
 
   const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
-
-  // await this.notificationService.sendPasswordResetEmail(
-  //   user.email,
-  //   resetLink
-  // );
+ const notificationService = new NotificationService();
+  await notificationService.sendNotification({
+    userId: user.id,
+    type: NotificationType.FORGOT_PASSWORD,
+    title: 'Reset Your Password',
+    message: 'Click the link to reset your password.',
+    channels: ['EMAIL'],
+    metadata: {
+      name: user.displayName,
+      resetUrl: resetLink,
+    },
+  });
 
   return genericResponse;
 }

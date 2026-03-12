@@ -15,18 +15,19 @@ export const loginSchema = z.object({
   }),
 });
 export const forgotPasswordSchema = z.object({
-  email: z.string().email(),
+  body: z.object({
+    email: z.string().email()
+  })
 });
 
 export const resetPasswordSchema = z.object({
-  token: z.string().min(10),
-  newPassword: z
-    .string()
-    .min(8)
-    .regex(/[A-Z]/, 'Must include uppercase letter')
-    .regex(/[a-z]/, 'Must include lowercase letter')
-    .regex(/[0-9]/, 'Must include number'),
+  body: z.object({
+    token: z.string(),
+    newPassword: z.string().min(6)
+  })
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>['body'];
 export type LoginInput = z.infer<typeof loginSchema>['body'];
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;

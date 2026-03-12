@@ -16,5 +16,19 @@ class AuthRepository {
             data,
         });
     }
+    async findByResetTokenHash(tokenHash) {
+        return prisma_1.default.user.findFirst({
+            where: {
+                resetTokenHash: tokenHash,
+                deletedAt: null,
+            },
+        });
+    }
+    async updateUser(userId, data) {
+        return prisma_1.default.user.update({
+            where: { id: userId },
+            data,
+        });
+    }
 }
 exports.AuthRepository = AuthRepository;

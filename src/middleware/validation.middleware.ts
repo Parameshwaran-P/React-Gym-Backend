@@ -5,6 +5,7 @@ import { ValidationError } from '../common/errors/AppError';
 export function validate(schema: ZodObject) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+       console.log("REQ BODY:", req.body);
       await schema.parseAsync({
         body: req.body,
         query: req.query,

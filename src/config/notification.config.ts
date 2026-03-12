@@ -17,18 +17,18 @@ export const notificationConfig = {
     },
   },
   
-  whatsapp: {
-    apiUrl: env.WHATSAPP_API_URL,
-    phoneNumberId: env.WHATSAPP_PHONE_NUMBER_ID,
-    accessToken: env.WHATSAPP_ACCESS_TOKEN,
-    businessAccountId: env.WHATSAPP_BUSINESS_ACCOUNT_ID,
-  },
+  // whatsapp: {
+  //   apiUrl: env.WHATSAPP_API_URL,
+  //   phoneNumberId: env.WHATSAPP_PHONE_NUMBER_ID,
+  //   accessToken: env.WHATSAPP_ACCESS_TOKEN,
+  //   businessAccountId: env.WHATSAPP_BUSINESS_ACCOUNT_ID,
+  // },
   
-  firebase: {
-    projectId: env.FIREBASE_PROJECT_ID,
-    privateKey: env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    clientEmail: env.FIREBASE_CLIENT_EMAIL,
-  },
+  // firebase: {
+  //   projectId: env.FIREBASE_PROJECT_ID,
+  //   privateKey: env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+  //   clientEmail: env.FIREBASE_CLIENT_EMAIL,
+  // },
   
   queue: {
     useQueue: env.USE_QUEUE === 'false',

@@ -1,7 +1,7 @@
 import { NotificationRepository } from '../repositories/notification.repository';
 import { EmailService } from './email.service';
-import { WhatsAppService } from './whatsapp.service';
-import { PushService } from './push.service';
+// import { WhatsAppService } from './whatsapp.service';
+// import { PushService } from './push.service';
 import {
   SendNotificationInput,
   BulkNotificationInput,
@@ -16,15 +16,15 @@ import prisma from '@/config/prisma';
 export class NotificationService {
   private repository: NotificationRepository;
   private emailService: EmailService;
-  private whatsappService: WhatsAppService;
-  private pushService: PushService;
+  // private whatsappService: WhatsAppService;
+  // private pushService: PushService;
   private queue: NotificationQueue;
 
   constructor() {
     this.repository = new NotificationRepository();
     this.emailService = new EmailService();
-    this.whatsappService = new WhatsAppService();
-    this.pushService = new PushService();
+    // this.whatsappService = new WhatsAppService();
+    // this.pushService = new PushService();
     this.queue = new NotificationQueue();
   }
 
@@ -162,12 +162,12 @@ export class NotificationService {
 
     // For production, use approved templates
     // For testing, you can send simple messages in sandbox mode
-    await this.whatsappService.sendMessage({
-      to: user.email, // Replace with actual phone number field
-      message: `${job.title}\n\n${job.message}`,
-      // templateName: 'your_approved_template',
-      // templateParams: [job.title, job.message],
-    });
+    // await this.whatsappService.sendMessage({
+    //   to: user.email, // Replace with actual phone number field
+    //   message: `${job.title}\n\n${job.message}`,
+    //   // templateName: 'your_approved_template',
+    //   // templateParams: [job.title, job.message],
+    // });
   }
 
   private async sendPushNotificationToUser(job: NotificationJob): Promise<void> {
@@ -177,16 +177,16 @@ export class NotificationService {
       throw new Error('No device tokens found for user');
     }
 
-    await this.pushService.sendPushNotification({
-      tokens: deviceTokens.map((dt) => dt.token),
-      title: job.title,
-      body: job.message,
-      data: {
-        notificationId: job.notificationId,
-        type: job.type,
-        ...(job.metadata || {}),
-      },
-    });
+    // await this.pushService.sendPushNotification({
+    //   tokens: deviceTokens.map((dt) => dt.token),
+    //   title: job.title,
+    //   body: job.message,
+    //   data: {
+    //     notificationId: job.notificationId,
+    //     type: job.type,
+    //     ...(job.metadata || {}),
+    //   },
+    // });
   }
 
   private async handleNotificationFailure(

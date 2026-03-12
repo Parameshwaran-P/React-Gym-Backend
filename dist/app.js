@@ -19,6 +19,7 @@ app.use((0, cors_1.default)({
 }));
 app.use(express_1.default.json());
 app.use(platform_middleware_1.platformMiddleware);
+app.use(express_1.default.urlencoded({ extended: true }));
 // Health check
 app.get('/health', (req, res) => {
     res.json({

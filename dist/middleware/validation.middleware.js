@@ -6,6 +6,7 @@ const AppError_1 = require("../common/errors/AppError");
 function validate(schema) {
     return async (req, res, next) => {
         try {
+            console.log("REQ BODY:", req.body);
             await schema.parseAsync({
                 body: req.body,
                 query: req.query,

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from './auth.service';
 import { successResponse } from '../../common/utils/response.util';
-import { forgotPasswordSchema, resetPasswordSchema } from './auth.validation';
 import { NotificationService } from '../../modules/notifications/services/notification.service';
 import { NotificationType } from '@prisma/client';
 
@@ -19,12 +18,13 @@ export class AuthController {
     console.log("result", result);
    await notificationService.sendNotification({
   userId: result.user.id,
-  type: NotificationType.CUSTOM,
+  type: NotificationType.REGISTRATION_SUCCESS,
   title: 'Welcome to Gamified Learning!',
   message: 'Thank you for registering. We are excited to have you on board!',
   channels: ['EMAIL'],
   metadata: {
-    testData: 'This is a test',
+      name: result.user.displayName,
+      loginUrl: 'https://react-gym-eight.vercel.app/',
   },
 });
     console.log('   ✅ Notification queued successfully');
@@ -37,15 +37,31 @@ export class AuthController {
   login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await this.authService.login(req.body);
+        const notificationService = new NotificationService();
+
+    await notificationService.sendNotification({
+      userId: result.user.id,
+      type: NotificationType.LOGIN_SUCCESS,
+      title: 'New Login Detected',
+      message: 'Your account was successfully logged in.',
+      channels: ['EMAIL'],
+      metadata: {
+        name: result.user.displayName,
+        device: req.headers['user-agent'],
+        location: req.ip,
+        time: new Date().toLocaleString(),
+        securityUrl: 'https://react-gym-eight.vercel.app/security'
+      },
+    });
       res.status(200).json(successResponse(result));
     } catch (error) {
       next(error);
     }
   };
 
-async forgotPassword(req: Request, res: Response, next: NextFunction) {
+forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email } = forgotPasswordSchema.parse(req.body);
+    const { email } = req.body;
 
     const result = await this.authService.forgotPassword(email);
 
@@ -53,11 +69,12 @@ async forgotPassword(req: Request, res: Response, next: NextFunction) {
   } catch (error) {
     next(error);
   }
-}
+};
 
-async resetPassword(req: Request, res: Response, next: NextFunction) {
+resetPassword = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { token, newPassword } = resetPasswordSchema.parse(req.body);
+    
+    const { token, newPassword } = req.body;
 
     const result = await this.authService.resetPassword(
       token,
