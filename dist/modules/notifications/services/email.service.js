@@ -14,7 +14,7 @@ class EmailService {
     async sendEmail(data) {
         try {
             const response = await this.resend.emails.send({
-                from: `noreplyreactgym.online`,
+                from: "React Gym <noreply@noreplyreactgym.online>",
                 to: data.to,
                 subject: data.subject,
                 html: data.html,
