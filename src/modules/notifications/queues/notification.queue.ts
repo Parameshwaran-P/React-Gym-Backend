@@ -1,7 +1,7 @@
 import { Queue, Worker, Job } from 'bullmq';
 import { NotificationJob } from '../types/notification.types';
-import { notificationConfig } from '@/config/notification.config';
-import logger from '@/config/logger';
+import { notificationConfig } from '../../../config/notification.config';
+import logger from '../../../config/logger';
 
 export class NotificationQueue {
   private queue: Queue | null = null;

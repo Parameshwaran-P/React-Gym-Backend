@@ -1,7 +1,8 @@
 import nodemailer from 'nodemailer';
-import { notificationConfig } from '@/config/notification.config';
+import { notificationConfig } from '../../../config/notification.config';
+import logger from '../../../config/logger';
 import { EmailData } from '../types/notification.types';
-import logger from '@/config/logger';
+
 
 export class EmailService {
   private transporter: nodemailer.Transporter;

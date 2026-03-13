@@ -38,8 +38,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationQueue = void 0;
 const bullmq_1 = require("bullmq");
-const notification_config_1 = require("@/config/notification.config");
-const logger_1 = __importDefault(require("@/config/logger"));
+const notification_config_1 = require("../../../config/notification.config");
+const logger_1 = __importDefault(require("../../../config/logger"));
 class NotificationQueue {
     constructor() {
         this.queue = null;
