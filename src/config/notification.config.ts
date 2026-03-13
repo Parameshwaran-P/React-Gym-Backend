@@ -1,16 +1,10 @@
 import { env } from './env';
 
 export const notificationConfig = {
-  email: {
-    smtp: {
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      secure: env.SMTP_SECURE === 'true',
-      auth: {
-        user: env.SMTP_USER,
-        pass: env.SMTP_PASSWORD,
-      },
-    },
+ email: {
+    provider: "resend",
+    apiKey: env.RESEND_API_KEY,
+
     from: {
       email: env.EMAIL_FROM,
       name: env.EMAIL_FROM_NAME,

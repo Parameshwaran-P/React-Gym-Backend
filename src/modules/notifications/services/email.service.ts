@@ -1,22 +1,20 @@
-import nodemailer from 'nodemailer';
-import { notificationConfig } from '../../../config/notification.config';
-import logger from '../../../config/logger';
-import { EmailData } from '../types/notification.types';
+// 
 
+import { Resend } from "resend";
+import { notificationConfig } from "../../../config/notification.config";
+import logger from "../../../config/logger";
+import { EmailData } from "../types/notification.types";
 
 export class EmailService {
-  private transporter: nodemailer.Transporter;
+  private resend: Resend;
 
   constructor() {
-    this.transporter = nodemailer.createTransport({
-      ...notificationConfig.email.smtp,
-      port: Number(notificationConfig.email.smtp.port),
-    });
+    this.resend = new Resend(process.env.RESEND_API_KEY);
   }
 
   async sendEmail(data: EmailData): Promise<void> {
     try {
-      await this.transporter.sendMail({
+      const response = await this.resend.emails.send({
         from: `"${notificationConfig.email.from.name}" <${notificationConfig.email.from.email}>`,
         to: data.to,
         subject: data.subject,
@@ -24,20 +22,32 @@ export class EmailService {
         text: data.text,
       });
 
-      logger.info('Email sent successfully', { to: data.to, subject: data.subject });
+      logger.info("Email sent successfully", {
+        to: data.to,
+        subject: data.subject,
+        id: response.data?.id,
+      });
     } catch (error: any) {
-      logger.error('Email sending failed', { error: error.message, to: data.to });
+      logger.error("Email sending failed", {
+        error: error.message,
+        to: data.to,
+      });
+
       throw new Error(`Email sending failed: ${error.message}`);
     }
   }
 
   async verifyConnection(): Promise<boolean> {
     try {
-      await this.transporter.verify();
-      logger.info('SMTP connection verified');
+      // simple API test
+      if (!process.env.RESEND_API_KEY) {
+        throw new Error("RESEND_API_KEY missing");
+      }
+
+      logger.info("Resend connection verified");
       return true;
     } catch (error: any) {
-      logger.error('SMTP connection failed', { error: error.message });
+      logger.error("Resend connection failed", { error: error.message });
       return false;
     }
   }

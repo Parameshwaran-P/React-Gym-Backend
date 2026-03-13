@@ -35,6 +35,7 @@ const envSchema = zod_1.z.object({
     SMTP_PASSWORD: zod_1.z.string().min(1, 'SMTP_PASSWORD is required'),
     EMAIL_FROM: zod_1.z.string().email('EMAIL_FROM must be a valid email'),
     EMAIL_FROM_NAME: zod_1.z.string().default('Notification System'),
+    RESEND_API_KEY: zod_1.z.string().optional(),
     // ====================================
     // WHATSAPP CONFIG
     // ====================================

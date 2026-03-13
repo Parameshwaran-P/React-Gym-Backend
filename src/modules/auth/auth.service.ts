@@ -108,6 +108,7 @@ export class AuthService {
   });
 
   const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
+  console.log('Generated reset link:', resetLink);
  const notificationService = new NotificationService();
   await notificationService.sendNotification({
     userId: user.id,

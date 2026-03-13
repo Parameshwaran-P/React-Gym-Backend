@@ -4,15 +4,8 @@ exports.notificationConfig = void 0;
 const env_1 = require("./env");
 exports.notificationConfig = {
     email: {
-        smtp: {
-            host: env_1.env.SMTP_HOST,
-            port: env_1.env.SMTP_PORT,
-            secure: env_1.env.SMTP_SECURE === 'true',
-            auth: {
-                user: env_1.env.SMTP_USER,
-                pass: env_1.env.SMTP_PASSWORD,
-            },
-        },
+        provider: "resend",
+        apiKey: env_1.env.RESEND_API_KEY,
         from: {
             email: env_1.env.EMAIL_FROM,
             name: env_1.env.EMAIL_FROM_NAME,

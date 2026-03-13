@@ -90,6 +90,7 @@ class AuthService {
             resetTokenExpiresAt: expiry,
         });
         const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
+        console.log('Generated reset link:', resetLink);
         const notificationService = new notification_service_1.NotificationService();
         await notificationService.sendNotification({
             userId: user.id,

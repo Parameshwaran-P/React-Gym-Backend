@@ -36,7 +36,7 @@
     "ioredis": "^5.10.0",
     "jsonwebtoken": "^9.0.3",
     "nodemailer": "^8.0.1",
-    "resend": "^6.9.2",
+    "resend": "^6.9.3",
     "tsconfig-paths": "^4.2.0",
     "winston": "^3.19.0",
     "zod": "^4.3.6"
