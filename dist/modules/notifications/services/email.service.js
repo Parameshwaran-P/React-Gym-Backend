@@ -15,7 +15,7 @@ class EmailService {
     async sendEmail(data) {
         try {
             const response = await this.resend.emails.send({
-                from: `"${notification_config_1.notificationConfig.email.from.name}" <${notification_config_1.notificationConfig.email.from.email}>`,
+                from: `<${notification_config_1.notificationConfig.email.from.email}>`,
                 to: data.to,
                 subject: data.subject,
                 html: data.html,

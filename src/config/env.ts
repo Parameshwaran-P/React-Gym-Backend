@@ -34,7 +34,7 @@ const envSchema = z.object({
   SMTP_SECURE: z.string().default('false'),
   SMTP_USER: z.string().email('SMTP_USER must be a valid email'),
   SMTP_PASSWORD: z.string().min(1, 'SMTP_PASSWORD is required'),
-  EMAIL_FROM: z.string().email('EMAIL_FROM must be a valid email'),
+  EMAIL_FROM: z.string().default('noreplyreactgym.online'),
   EMAIL_FROM_NAME: z.string().default('Notification System'),
   RESEND_API_KEY: z.string().optional(),
   // ====================================

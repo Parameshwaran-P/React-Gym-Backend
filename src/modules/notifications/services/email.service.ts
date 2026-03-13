@@ -15,7 +15,7 @@ export class EmailService {
   async sendEmail(data: EmailData): Promise<void> {
     try {
       const response = await this.resend.emails.send({
-        from: `"${notificationConfig.email.from.name}" <${notificationConfig.email.from.email}>`,
+        from: `<${notificationConfig.email.from.email}>`,
         to: data.to,
         subject: data.subject,
         html: data.html,
