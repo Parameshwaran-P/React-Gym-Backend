@@ -10,8 +10,8 @@ import {
 import { NotificationChannel, NotificationType } from '@prisma/client';
 import { NotificationQueue } from '../queues/notification.queue';
 import { getNotificationTemplate } from '../utils/template.util';
-import logger from '@/config/logger';
-import prisma from '@/config/prisma';
+import logger from '../../../config/logger';
+import prisma from '../../../config/prisma';
 
 export class NotificationService {
   private repository: NotificationRepository;

@@ -9,8 +9,8 @@ const email_service_1 = require("./email.service");
 const client_1 = require("@prisma/client");
 const notification_queue_1 = require("../queues/notification.queue");
 const template_util_1 = require("../utils/template.util");
-const logger_1 = __importDefault(require("@/config/logger"));
-const prisma_1 = __importDefault(require("@/config/prisma"));
+const logger_1 = __importDefault(require("../../../config/logger"));
+const prisma_1 = __importDefault(require("../../../config/prisma"));
 class NotificationService {
     constructor() {
         this.repository = new notification_repository_1.NotificationRepository();
