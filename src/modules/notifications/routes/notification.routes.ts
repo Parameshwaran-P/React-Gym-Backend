@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { NotificationController } from '../controllers/notification.controller';
-import { authMiddleware } from '@/middleware/auth.middleware';
-import { validate } from '@/middleware/validation.middleware';
+// import { authMiddleware } from '@/middleware/auth.middleware';
+// import { validate } from '@/middleware/validation.middleware';
+import { authMiddleware } from '../../../middleware/auth.middleware';
+import { validate } from '../../../middleware/validation.middleware';
 import {
   sendNotificationSchema,
   bulkNotificationSchema,
@@ -9,7 +11,7 @@ import {
   updatePreferencesSchema,
   registerDeviceTokenSchema,
 } from '../validation/notification.validation';
-import { requireRole } from '@/middleware/rbac.middleware';
+import { requireRole } from '../../../middleware/rbac.middleware';
 import { Role } from '@prisma/client';
 import rateLimit from 'express-rate-limit';
 

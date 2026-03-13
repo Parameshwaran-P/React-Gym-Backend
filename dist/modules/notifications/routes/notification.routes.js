@@ -5,10 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const notification_controller_1 = require("../controllers/notification.controller");
-const auth_middleware_1 = require("@/middleware/auth.middleware");
-const validation_middleware_1 = require("@/middleware/validation.middleware");
+// import { authMiddleware } from '@/middleware/auth.middleware';
+// import { validate } from '@/middleware/validation.middleware';
+const auth_middleware_1 = require("../../../middleware/auth.middleware");
+const validation_middleware_1 = require("../../../middleware/validation.middleware");
 const notification_validation_1 = require("../validation/notification.validation");
-const rbac_middleware_1 = require("@/middleware/rbac.middleware");
+const rbac_middleware_1 = require("../../../middleware/rbac.middleware");
 const client_1 = require("@prisma/client");
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const router = (0, express_1.Router)();

@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationController = void 0;
 const notification_service_1 = require("../services/notification.service");
-const response_util_1 = require("@/common/utils/response.util");
+// import { successResponse } from '@/common/utils/response.util';
+const response_util_1 = require("../../../common/utils/response.util");
 class NotificationController {
     constructor() {
         this.sendNotification = async (req, res, next) => {

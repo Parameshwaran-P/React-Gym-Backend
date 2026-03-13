@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { NotificationService } from '../services/notification.service';
-import { successResponse } from '@/common/utils/response.util';
+// import { successResponse } from '@/common/utils/response.util';
+import { successResponse } from '../../../common/utils/response.util';
 
 export class NotificationController {
   private notificationService: NotificationService;
